@@ -116,6 +116,14 @@ fun getContentLength(responseHeaders: Map<String, List<String>>, task: Task): Lo
     if (contentLength != -1L) {
         return contentLength
     }
+    // if response provides XContentLength, return it
+    val xContentLength = responseHeaders["X-Content-Length"]?.get(0)?.toLongOrNull()
+        ?: responseHeaders["x-content-length"]?.get(0)?.toLongOrNull()
+        ?: -1L
+    if (xContentLength != -1L) {
+        Log.d(TAG, "TaskId ${task.taskId} content length set to $xContentLength based on X-Content-Length header")
+        return xContentLength
+    }
     // try extracting it from Range header
     val taskRangeHeader = task.headers["Range"] ?: task.headers["range"] ?: ""
     val taskRange = parseRange(taskRangeHeader)

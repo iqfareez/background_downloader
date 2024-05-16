@@ -212,6 +212,14 @@ func parseRange(rangeStr: String) -> (Int64, Int64?) {
 func getContentLength(responseHeaders: [AnyHashable: Any], task: Task) -> Int64 {
     // On iOS, the header has already been parsed for Content-Length so we don't need to
     // repeat that here
+    
+    // Check if X-Content-Length exist from response headers (case insensitive)
+    if let contentLengthString = responseHeaders.first(where: { ($0.key as? String)?.lowercased() == "x-content-length" })?.value as? String,
+       let alternateContentLengthHeader = Int64(contentLengthString) {
+        os_log("TaskId %@ contentLength set to %d based on x-content-length header", log: log, type: .info, task.taskId, alternateContentLengthHeader)
+        return alternateContentLengthHeader
+    }
+    
     // try extracting it from Range header
     let taskRangeHeader = task.headers["Range"] ?? ""
     let taskRange = parseRange(rangeStr: taskRangeHeader)

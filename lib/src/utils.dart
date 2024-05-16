@@ -45,6 +45,13 @@ int getContentLength(Map<String, String> responseHeaders, Task task) {
   if (contentLength != null && contentLength != -1) {
     return contentLength;
   }
+  // Some server remove the content-length header, but provide it in a custom header
+  final xContentLength = int.tryParse(responseHeaders['X-Content-Length'] ??
+      responseHeaders['x-content-length'] ??
+      '-1');
+  if (xContentLength != null && xContentLength != -1) {
+    return xContentLength;
+  }
   // try extracting it from Range header
   final taskRangeHeader = task.headers['Range'] ?? task.headers['range'] ?? '';
   final taskRange = parseRange(taskRangeHeader);

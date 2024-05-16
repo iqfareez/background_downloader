@@ -1,3 +1,9 @@
+# iqfareez's changes
+
+- Add alternative to content-length header, which is `x-content-length` for both Android & iOS platforms.
+
+___
+
 # A background file downloader and uploader for iOS, Android, MacOS, Windows and Linux
 
 Create a [DownloadTask](https://pub.dev/documentation/background_downloader/latest/background_downloader/DownloadTask-class.html) to define where to get your file from, where to store it, and how you want to monitor the download, then call `FileDownloader().download` and wait for the result.  Background_downloader uses URLSessions on iOS and DownloadWorker on Android, so tasks will complete also when your app is in the background. The download behavior is highly consistent across all supported platforms: iOS, Android, MacOS, Windows and Linux.
